@@ -76,7 +76,7 @@ export default function OnlyButton4() {
           setRecording(recordingObject);
           setMessage("Recording started...");
 
-          // Automatically stop recording after 15 seconds
+          // Automatically stop recording after 10 seconds
           setTimeout(async () => {
             if (recordingObject) {
               await stopRecording(recordingObject);
@@ -84,7 +84,7 @@ export default function OnlyButton4() {
               console.warn('Recording was not properly initialized.');
               setMessage("Recording was not started properly.");
             }
-          }, 15000);
+          }, 10000);
         } catch (error) {
           console.error('Failed to start recording:', error);
           setMessage("Error starting recording.");
@@ -117,7 +117,7 @@ export default function OnlyButton4() {
           name: 'recording.3gp'
         });
 
-        const response = await axios.post('http://192.168.122.193:5000/match', formData, {
+        const response = await axios.post('http://192.168.145.109:5000/match', formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           }
