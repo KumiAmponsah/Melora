@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, ActivityIndicator, ScrollView, BackHandler } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions, TouchableOpacity, ActivityIndicator, ScrollView, BackHandler, Alert } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Linking from 'expo-linking';
 import axios from 'axios';
@@ -7,6 +7,7 @@ import { FontAwesome } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { Audio } from 'expo-av';
 import { useFocusEffect } from '@react-navigation/native';
+import * as Clipboard from 'expo-clipboard'; // Updated import
 
 const { width, height } = Dimensions.get('window');
 
@@ -119,6 +120,21 @@ export default function ShowDisplay1({ route, navigation }) {
     return true; // Return true to prevent default back action
   };
 
+  const handleCopySongInfo = () => {
+    const songInfo = `${metadata.title}\n ${metadata.artist}`;
+    Clipboard.setStringAsync(songInfo).then(() => {
+      Alert.alert('Copied', 'Song info copied to clipboard!');
+    }).catch(err => {
+      console.error('Failed to copy song info:', err);
+    });
+  };
+
+  // Construct the YouTube search URL
+  const youtubeSearchUrl = `https://www.youtube.com/results?search_query=${encodeURIComponent(metadata.title + ' ' + metadata.artist)}`;
+
+  // Construct the VK Music Bot URL
+  const vkMusicBotUrl = `https://t.me/vkmusic_bot?start=${encodeURIComponent(metadata.title + ' ' + metadata.artist)}`;
+
   return (
     <LinearGradient colors={['#121212', '#1c1c1c']} style={styles.container}>
       <TouchableOpacity style={styles.backButton} onPress={handleBackPress}>
@@ -133,7 +149,7 @@ export default function ShowDisplay1({ route, navigation }) {
           <Text style={styles.noImageText}>No Image Available</Text>
         )}
       </View>
-      <LinearGradient colors={['#121212','#5e16ec']} style={styles.metadataContainer}>
+      <LinearGradient colors={['#121212', '#5e16ec']} style={styles.metadataContainer}>
         <ScrollView contentContainerStyle={styles.scrollViewContent}>
           <Text style={styles.title}>{metadata.title}</Text>
           <Text style={styles.text}>Artist: {metadata.artist}</Text>
@@ -151,6 +167,18 @@ export default function ShowDisplay1({ route, navigation }) {
               <Text style={styles.clickToPlay}>Click to play full song</Text>
             </TouchableOpacity>
           ) : null}
+          <TouchableOpacity onPress={() => openURL(`https://tubidy.ws/search/${metadata.title.replace(/ /g, '-')}-${metadata.artist.replace(/ /g, '-')}`)}>
+            <Text style={styles.clickToPlay}>Click to download</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => openURL(youtubeSearchUrl)}>
+            <Text style={styles.clickToPlay}>Search on YouTube</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => openURL(vkMusicBotUrl)}>
+            <Text style={styles.clickToPlay}>VK Music Bot</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleCopySongInfo}>
+            <Text style={styles.copyInfo}>Copy Song Info</Text>
+          </TouchableOpacity>
           <View style={styles.lyricsContainer}>
             <Text style={styles.lyricssubText}>Lyrics</Text>
             <Text style={styles.lyricsText}>{lyrics}</Text>
@@ -196,15 +224,14 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
     backgroundColor: 'rgba(0, 0, 0, 0.7)',
-    borderTopLeftRadius: 25,
-    borderTopRightRadius: 25,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
   },
   scrollViewContent: {
-    flexGrow: 1,
-    justifyContent: 'center',
+    alignItems: 'center',
   },
   title: {
-    fontSize: 32,
+    fontSize: 24,
     color: '#fff',
     fontWeight: 'bold',
     marginBottom: 10,
@@ -212,44 +239,43 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    color: '#e0e0e0',
-    marginBottom: 8,
+    color: '#d3d3d3',
+    marginBottom: 10,
     textAlign: 'center',
-  },
-  linkText: {
-    color: '#1e90ff',
-    textDecorationLine: 'underline',
   },
   playButton: {
-    marginTop: 30,
-    alignSelf: 'center',
+    alignItems: 'center',
+    marginVertical: 20,
+  },
+  previewText: {
+    fontSize: 16,
+    color: '#fff',
+    marginTop: 5,
   },
   clickToPlay: {
+    fontSize: 18,
     color: '#1e90ff',
-    textDecorationLine: 'underline',
-    marginTop: 20,
     textAlign: 'center',
-    fontSize: 16,
+    marginVertical: 10,
+  },
+  copyInfo: {
+    fontSize: 18,
+    color: '#1e90ff',
+    textAlign: 'center',
+    marginVertical: 10,
   },
   lyricsContainer: {
     marginTop: 20,
-    paddingHorizontal: 10,
+    padding: 10,
+  },
+  lyricssubText: {
+    fontSize: 22,
+    color: '#fff',
+    marginBottom: 10,
   },
   lyricsText: {
-    fontSize: 16,
-    color: '#e0e0e0',
+    fontSize: 18,
+    color: '#d3d3d3',
     textAlign: 'center',
   },
-  previewText:{
-    color: '#c9c4c4',
-    fontWeight:'500',
-    alignSelf: 'center',
-  },
-  lyricssubText:{
-    color: '#c9c4c4',
-    fontWeight:'500',
-    fontSize:50,
-    alignSelf: 'center',
-    marginBottom:20
-  }
 });
