@@ -1,11 +1,32 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Switch } from 'react-native';
+import { StyleSheet, Text, View, ScrollView, Image, TouchableOpacity, Dimensions, Switch, TouchableNativeFeedback } from 'react-native';
 import { FontAwesome, FontAwesome6 } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
 
+import { TouchableWithoutFeedback,  TouchableHighlight} from 'react-native';
+import { TextInput } from 'react-native-gesture-handler';
+
 export default function Settings() {
   const navigation = useNavigation();
+  const [text, setText, setNumber, number] = useState('');
+  
+
+
+  // const [number, setNumber] = useState('');
+
+  // This function will be called every time the user types in the TextInput
+  const onChangedNumber = (input) => {
+    // Here you could add validation, formatting, etc.
+    // For example, we only accept numbers:
+    const formattedInput = input.replace(/[^0-9]/g, '');
+    setNumber(formattedInput);
+  };
+
+
+  
+  const { width, height } = Dimensions.get('window');
+  
 
   const [switchStates, setSwitchStates] = useState({
     meloraInNotification: false,
@@ -201,6 +222,56 @@ export default function Settings() {
             </View>
           </View>
         </TouchableOpacity>
+
+        <TouchableNativeFeedback onPress={() => console.log('Pressed!')}>
+  <View style={{ width: 100, height: 100, backgroundColor: 'blue' }} />
+</TouchableNativeFeedback>
+
+
+<TouchableWithoutFeedback onPress={() => console.log('Pressed!')}>
+  <View style={{ width: 100, height: 100, backgroundColor: 'red' }} />
+</TouchableWithoutFeedback>
+
+<TouchableHighlight 
+  onPress={() => console.log('Pressed!')} 
+  underlayColor="lightgray"
+>
+  <View style={{ width: 100, height: 100, backgroundColor: 'yellow' }} />
+</TouchableHighlight>
+
+<TouchableHighlight 
+  onPress={() => console.log('Pressed!')} 
+  underlayColor="lightgray"
+>
+  <View style={{ width: 100, height: 100, backgroundColor: 'yellow', justifyContent: 'center', alignItems: 'center' }}>
+    <Text>Press Me</Text>
+  </View>
+</TouchableHighlight>
+
+<TextInput style = {{width: 150, height: 50,backgroundColor: 'pink', marginTop: 20, borderRadius:10}} keyboardType='numeric'></TextInput>
+
+
+
+<View>
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1, color:'white' }}
+        placeholder="Type here"
+        onChangeText={(newText) => setText(newText)}
+        value={text}
+      />
+      <Text>You typed: {text}</Text>
+    </View>
+
+
+    <View>
+      <TextInput
+        style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+        placeholder="Enter your phone number"
+        onChangeText={onChangedNumber} // This is where we use the custom function
+        value={number} // Keeps the TextInput value synced with the state
+      />
+      <Text>Your phone number is: {number}</Text>
+    </View>
 
         <View style={styles.line} />
       </View>

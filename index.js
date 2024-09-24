@@ -20,9 +20,12 @@ async function main() {
 
   const upload = multer({ dest: 'uploads/' });
 
+//   NEW ACCESS KEY = 'c6d68ea3416ab8b5f3a119ae6ed365e1'
+// NEW SECRET KEY = 'ifxOTx20qWoPM8wv7nqdy06XIlN0hORuIptGphfN'
+
   const ACRCloudHost = 'identify-eu-west-1.acrcloud.com';
-  const ACRCloudAccessKey = '4760852373f8e02eda4a29d70428d961';
-  const ACRCloudAccessSecret = 'aHAZEh2Y1p54fZ74Wu3myz91mDqPjKcf1yjrbtNB';
+  const ACRCloudAccessKey = 'c6d68ea3416ab8b5f3a119ae6ed365e1';
+  const ACRCloudAccessSecret = 'ifxOTx20qWoPM8wv7nqdy06XIlN0hORuIptGphfN';
   const ExternalMetadataAPI = 'https://eu-api-v2.acrcloud.com/api/external-metadata';
 
   const SpotifyClientId = process.env.SPOTIFY_CLIENT_ID;

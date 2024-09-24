@@ -29,7 +29,7 @@ export default function SignIn() {
         .eq('password', password)
         .single();
 
-      if (error && error.code !== 'PGRST116') {
+      if (error && error.code !== 'PGRST116') { // Check if error is not "No rows found"
         Alert.alert('Error', 'Error fetching user data.');
         console.error('Error:', error.message);
         return;
@@ -38,8 +38,7 @@ export default function SignIn() {
       if (user) {
         navigation.navigate('SaveYourSearch', {
           firstName: user.first_name,
-          lastName: user.last_name,
-          isLoggedIn: true
+          lastName: user.last_name
         });
       } else {
         Alert.alert('Error', 'Incorrect email or password.');
@@ -98,7 +97,9 @@ export default function SignIn() {
               </View>
 
               <View style={styles.formAction}>
-                <TouchableOpacity onPress={handleSignIn}>
+                <TouchableOpacity
+                  onPress={handleSignIn}
+                >
                   <View style={styles.btn}>
                     <Text style={styles.btnText}>Sign in</Text>
                   </View>
@@ -108,7 +109,10 @@ export default function SignIn() {
 
             <TouchableOpacity
               style={{ marginTop: 'auto' }}
-              onPress={() => navigation.navigate('SignUp')}>
+              onPress={() => {
+                navigation.navigate('SignUp');
+              }}
+            >
               <Text style={styles.formFooter}>
                 Get started with Melora.{' '}
                 <Text style={{ textDecorationLine: 'underline' }}>Sign up</Text>
@@ -116,11 +120,13 @@ export default function SignIn() {
             </TouchableOpacity>
           </View>
 
+          {/* Place the footer image here */}
           <Image
             source={require('./assets/waveImage.png')}
             style={styles.footerImg}
             alt="waveDesign"
           />
+
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

@@ -32,7 +32,7 @@ export default function ResultsNotFound() {
         <FontAwesome name="ban" size={width * 0.27} color="#FFFFFF" style={styles.icon} />
         <Text style={styles.NoResulttext}>No Result</Text>
         <Text style={styles.Messagetext}>We didn't quite catch that</Text>
-        <TouchableOpacity style={styles.touchableButton} onPress={() => navigation.navigate('Home')}>
+        <TouchableOpacity style={styles.touchableButton} onPress={() => navigation.navigate('BottomTabs')}>
           <Text style={styles.TryAgaintext}>Try Again</Text>
         </TouchableOpacity>
       </View>

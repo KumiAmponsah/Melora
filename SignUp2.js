@@ -1,58 +1,17 @@
 import React, { useState } from "react";
 import { SafeAreaView, View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Alert, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
-import { createClient } from '@supabase/supabase-js';
 import { useNavigation } from '@react-navigation/native';
 
-const supabaseUrl = 'https://odmahancvvtqqbiagszq.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kbWFoYW5jdnZ0cXFiaWFnc3pxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjAwOTgwODUsImV4cCI6MjAzNTY3NDA4NX0.JFdMw7hpaQXPEWYlG5FK-dEr5EuCXyNH8192kMQWDVE';
-const supabase = createClient(supabaseUrl, supabaseKey);
-
-export default function SignIn() {
+export default function App() {
+    const navigation = useNavigation();
   const [form, setForm] = useState({
     email: '',
     password: '',
   });
-  const navigation = useNavigation();
-
-  const handleSignIn = async () => {
-    const { email, password } = form;
-    if (!email || !password) {
-      Alert.alert('Error', 'Please enter both email and password.');
-      return;
-    }
-
-    try {
-      const { data: user, error } = await supabase
-        .from('account')
-        .select('*')
-        .eq('email', email)
-        .eq('password', password)
-        .single();
-
-      if (error && error.code !== 'PGRST116') {
-        Alert.alert('Error', 'Error fetching user data.');
-        console.error('Error:', error.message);
-        return;
-      }
-
-      if (user) {
-        navigation.navigate('SaveYourSearch', {
-          firstName: user.first_name,
-          lastName: user.last_name,
-          isLoggedIn: true
-        });
-      } else {
-        Alert.alert('Error', 'Incorrect email or password.');
-      }
-    } catch (error) {
-      Alert.alert('Error', 'An unexpected error occurred.');
-      console.error('Unexpected Error:', error.message);
-    }
-  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: '#e8ecf4' }}>
-      <KeyboardAvoidingView
+      <KeyboardAvoidingView 
         style={{ flex: 1 }}
         behavior={Platform.OS === "ios" ? "padding" : undefined}
       >
@@ -64,7 +23,7 @@ export default function SignIn() {
                 style={styles.headerImg}
                 alt="Logo"
               />
-              <Text style={styles.title}>Sign in to Melora</Text>
+              <Text style={styles.title}>Sign up 2 to Melora</Text>
               <Text style={styles.subtitle}>
                 Access all discoveries, all in one place
               </Text>
@@ -98,7 +57,9 @@ export default function SignIn() {
               </View>
 
               <View style={styles.formAction}>
-                <TouchableOpacity onPress={handleSignIn}>
+                <TouchableOpacity
+                        onPress={() => navigation.navigate('SignUp3')}
+                >
                   <View style={styles.btn}>
                     <Text style={styles.btnText}>Sign in</Text>
                   </View>
@@ -108,7 +69,8 @@ export default function SignIn() {
 
             <TouchableOpacity
               style={{ marginTop: 'auto' }}
-              onPress={() => navigation.navigate('SignUp')}>
+              onPress={() => navigation.navigate('SignUp2')}
+            >
               <Text style={styles.formFooter}>
                 Get started with Melora.{' '}
                 <Text style={{ textDecorationLine: 'underline' }}>Sign up</Text>
@@ -116,11 +78,13 @@ export default function SignIn() {
             </TouchableOpacity>
           </View>
 
+          {/* Place the footer image here */}
           <Image
             source={require('./assets/waveImage.png')}
             style={styles.footerImg}
             alt="waveDesign"
           />
+
         </ScrollView>
       </KeyboardAvoidingView>
     </SafeAreaView>

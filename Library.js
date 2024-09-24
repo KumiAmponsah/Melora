@@ -87,7 +87,7 @@ export default function Library() {
                                 />
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.tab0}>
+            <TouchableOpacity style={styles.tab0} onPress={() => navigation.navigate('Details')}>
               <Text style={styles.tabText}>Playlists for you</Text>
               <Image
                                     source={require('./assets/playlist.png')} // Path to your music.png
